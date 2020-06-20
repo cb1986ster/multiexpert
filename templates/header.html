@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand" href="#">
+      {% load static %}
+      <img src="{% static 'images/logo.png' %}" />
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'HomePage' %}">Strona główna</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="help-pages" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Pomoc
+        </a>
+        <div class="dropdown-menu" aria-labelledby="help-pages">
+          {% for help_page in help_pages %}
+            <a class="dropdown-item" href="{% url 'Page' help_page.slug %}">{{help_page.title}}</a>
+          {% endfor %}
+        </div>
+      </li>
+      {% if request.user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+        </li>
+      {% endif %}
+    </ul>
+    <form class="form-inline mt-2 mt-md-0" action="{% url 'SearchStatment' %}">
+      <input name="q" class="form-control mr-sm-2" type="text" placeholder="szukaj wypowiedzi..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj</button>
+    </form>
+  </div>
+</nav>

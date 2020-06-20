@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card" style="">
+      <div class="card-body">
+        <h5 class="card-title">
+            {% autoescape off %}{{ statement.text }}{% endautoescape %}
+        </h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for anwser in statement.possible_anwser %}
+           <li class="list-group-item">
+            <a href="{% url 'Statement' anwser.goto.pk %}">{{ anwser.text }}</a>
+            {% if request.user.is_staff %}
+              <a href="{% url 'admin:dialog_anwser_change' anwser.id %}" class="btn btn-primary"><span class="glyphicon">&#x270f;</span></a>
+            {% endif %}
+          </li>
+        {% empty %}
+          <li class="list-group-item">
+            brak opcji dialogowych
+          </li>
+        {% endfor%}
+       </ul>
+      <div class="card-body text-right">
+        {% if request.GET.anwser_added_waiting_for_accept %}
+            Dodano odpowiedź, czeka teraz na akceptacje jaśnie admina.<br/>
+        {% endif %}
+
+        {% load crispy_forms_tags %}
+        <a href="#" onclick="$(this).slideUp().next().slideDown();" style="{% if request.method == 'POST'%}display: none;{% endif%}" class="btn btn-primary">Zaproponuj odpowiedź</a>
+        <form style="{% if request.method == 'GET'%}display: none;{% endif%}" method="POST" action="{% url 'Statement' statement.pk %}">
+            {% csrf_token %}
+            <div class="text-left">
+                {{ form | crispy  }}
+            </div>
+            <script>
+                $(()=>{
+                    var is_new_statement = $('#id_make_new_statement');
+                    var toggleFields = () => {
+                        if (is_new_statement.prop('checked')){
+                            $('#div_id_new_statement').show();
+                            $('#div_id_goto_statement').hide();
+                        } else {
+                            $('#div_id_new_statement').hide();
+                            $('#div_id_goto_statement').show();
+                        }
+                        is_new_statement();
+
+                    }
+                    is_new_statement.change(toggleFields);
+                    toggleFields();
+                });
+            </script>
+            <input type="submit" class="btn btn-success" value="Wyjślij propozycję" />
+            <a href="#" onclick="void($(this).parent().slideUp().prev().slideDown())" class="btn btn-warning">Anuluj</a>
+        </form>
+
+      </div>
+      <div class="card-footer text-right">
+        <small class="text-muted">
+          ID wypowiedzi:
+          <a href="//{{ request.META.HTTP_HOST }}{% url 'Statement' statement.pk %}">
+            {{ statement.id }}
+          </a>
+          {% if request.user.is_staff %}
+            <a href="{% url 'admin:dialog_statement_change' statement.id %}" class="btn btn-primary"><span class="glyphicon">&#x270f;</span></a>
+          {% endif %}
+        </small>
+      </div>
+    </div>
+{% endblock %}

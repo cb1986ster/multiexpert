@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load highlighter %}
+    <h3>Poszukiwano <u>{{ request.GET.q }}</u>:</h3>
+    {% for statement in found %}
+        <hr/>
+        <div class="row">
+            <div class="col">
+                {% autoescape off %}{{ statement|highlight_for_found:request.GET.q }}{% endautoescape %}
+            </div>
+            <div class="col">
+                <a href="{% url 'Statement' statement.id %}">przejdź tam</a>
+                {% if request.user.is_staff %}
+                  <a href="{% url 'admin:dialog_statement_change' statement.id %}" class="btn btn-primary"><span class="glyphicon">&#x270f;</span></a>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        Brak elementów spełniających kryteria
+    {% endfor %}
+{% endblock %}

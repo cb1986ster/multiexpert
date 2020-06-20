@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3>
+        {% autoescape off %}
+            {{ object.title }}
+        {% endautoescape %}
+    </h3>
+    <hr/>
+    <p>
+        {% autoescape off %}
+            {{ object.text }}
+        {% endautoescape %}
+    </p>
+{% endblock %}

@@ -1,0 +1,15 @@
+<div id="footer" class="container">
+  <hr />
+  <footer>
+  {% block footer %}
+    {# Global context #}
+    Generated at: {{ time_now|date:'Y-m-d H:i:s' }} |
+    Server load: {{ server_load }} |
+    {% if request.user.is_authenticated %}
+        Hi <b>{{ request.user.username }}</b> (<a href="{% url 'admin:logout' %}">Logout</a>)
+    {% else %}
+        <a href="{% url 'admin:login' %}">Login</a>
+    {% endif %}
+  {% endblock %}
+  </footer>
+</div>
