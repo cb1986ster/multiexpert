@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dialog',
     'django_extensions',
-    'crispy_forms'
+    'crispy_forms',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,7 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+RECAPTCHA_PUBLIC_KEY = '6LfTS6cZAAAAAMSzTRT1Qh7V6PPIe1TNzo1eA5Cr'
+RECAPTCHA_PRIVATE_KEY = '6LfTS6cZAAAAAAEIEMeAeSPuOr3-a52pwV6THm1i'

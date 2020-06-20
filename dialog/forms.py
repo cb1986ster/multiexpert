@@ -1,5 +1,7 @@
 from django import forms
 from .models import Statement
+from captcha.fields import ReCaptchaField
+
 class AnwserProposeForm(forms.Form):
     text = forms.CharField(
         label='Tekst odpowiedź'
@@ -23,6 +25,7 @@ class AnwserProposeForm(forms.Form):
             }
         )
     )
+    captcha = ReCaptchaField()
     def clean(self):
         cleaned_data = super().clean()
         make_new_statement = cleaned_data.get("make_new_statement")
