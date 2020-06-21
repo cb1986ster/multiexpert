@@ -1,6 +1,7 @@
 from django import forms
 from .models import Statement
 from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 class AnwserProposeForm(forms.Form):
     text = forms.CharField(
@@ -25,9 +26,16 @@ class AnwserProposeForm(forms.Form):
             }
         )
     )
-    captcha = ReCaptchaField()
+    captcha = ReCaptchaField(
+        widget=ReCaptchaV2Checkbox(
+            attrs={'data-callback': 'enableSubmit'}
+        )
+    )
     def clean(self):
         cleaned_data = super().clean()
+        if not cleaned_data.get("captcha"):
+            raise forms.ValidationError("Sprawdź czy nie jesteś robotem :)")
+
         make_new_statement = cleaned_data.get("make_new_statement")
         if make_new_statement:
             new_statement = cleaned_data.get("new_statement")

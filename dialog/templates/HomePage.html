@@ -50,8 +50,11 @@
                     is_new_statement.change(toggleFields);
                     toggleFields();
                 });
+                function enableSubmit(){
+                    document.querySelector("#submit-proposal").disabled = false;
+                };
             </script>
-            <input type="submit" class="btn btn-success" value="Wyjślij propozycję" />
+            <input id="submit-proposal" type="submit" disabled="disabled" class="btn btn-success" value="Wyjślij propozycję" />
             <a href="#" onclick="void($(this).parent().slideUp().prev().slideDown())" class="btn btn-warning">Anuluj</a>
         </form>
 
