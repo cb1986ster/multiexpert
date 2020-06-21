@@ -2,10 +2,30 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
+from django.urls import reverse
 
-from .models import Statement, Page
+from graphviz import Digraph, Graph
+
+from .models import Statement, Page, Anwser
 from .forms import AnwserProposeForm
 
+
+class GraphView(TemplateView):
+    template_name = 'Graph.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        dot = Digraph(comment='Graf rozmowy', format='svg')
+        # dot = Graph('Graf rozmowy', format='svg')
+        for s in Statement.objects.all():
+            dot.node("s_"+str(s.id), str(s),style="filled",shape="note",fillcolor="#8ad9cf",URL=reverse('Statement',args=(s.id,)))
+        for a in Anwser.objects.all():
+            dot.node("a_"+str(a.id), str(a),style="filled",shape="signature",fillcolor="#e4b78a")
+
+            dot.edge("a_"+str(a.id), "s_"+str(a.goto.id),label="Przejdź do")
+            for s in a.statement_set.all():
+                dot.edge("s_"+str(s.id),"a_"+str(a.id))
+        context['graph'] = dot.pipe().decode('utf-8')
+        return context
 
 class HomePageView(TemplateView):
     template_name = 'HomePage.html'

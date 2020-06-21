@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from dialog.views import HomePageView, StatementView, PageView, SearchStatementView
+from dialog.views import HomePageView, StatementView, PageView, SearchStatementView, GraphView
 
 urlpatterns = [
     path('',HomePageView.as_view(),name="HomePage"),
     path('s/<pk>',StatementView.as_view(),name="Statement"),
+    path('dialog-graph.html',GraphView.as_view(),name="Grap"),
     path('<slug>.html',PageView.as_view(),name="Page"),
     path('search-statment/',SearchStatementView.as_view(),name="SearchStatment"),
     path('admin/', admin.site.urls),
